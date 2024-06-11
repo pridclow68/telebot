@@ -26,6 +26,7 @@ _testmain.go
 .idea
 .DS_Store
 coverage.txt
+example/app-bin
 
 # Terraform artifacts
 *.zip

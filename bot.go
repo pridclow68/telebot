@@ -73,10 +73,12 @@ type Bot struct {
 	URL     string
 	Updates chan Update
 	Poller  Poller
+
 	onError func(error, Context)
 
 	group       *Group
 	handlers    map[string]HandlerFunc
+	response    map[string]interface{}
 	synchronous bool
 	verbose     bool
 	parseMode   ParseMode
@@ -202,6 +204,11 @@ func (b *Bot) Trigger(endpoint interface{}, c Context) error {
 	}
 
 	return handler(c)
+}
+
+// Response returns the last response object.
+func (b *Bot) Response() map[string]interface{} {
+	return b.response
 }
 
 // Start brings bot into motion by consuming incoming

@@ -6,20 +6,55 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 )
 
+// containsWebhookKey check if payload contains webhook key
+func (b *Bot) containsWebhookKey(payload interface{}) bool {
+	v := reflect.ValueOf(payload)
+	switch v.Kind() {
+	case reflect.Map:
+		for _, key := range v.MapKeys() {
+			if key.String() == "webhook" {
+				return true
+			}
+		}
+	case reflect.Struct:
+		if v.FieldByName("Webhook").IsValid() {
+			return true
+		}
+	}
+	return false
+}
+
 // Raw lets you call any method of Bot API manually.
 // It also handles API errors, so you only need to unwrap
 // result field from json data.
 func (b *Bot) Raw(method string, payload interface{}) ([]byte, error) {
+
+	if _, ok := b.Poller.(*Webhook); ok {
+		if b.containsWebhookKey(payload) {
+			response := make(map[string]interface{})
+			if v, err := json.Marshal(payload); err == nil {
+				json.Unmarshal(v, &response)
+			}
+
+			if _, ok := response["webhook"]; ok {
+				delete(response, "webhook")
+				response["method"] = method
+				b.response = response
+				return json.Marshal(response)
+			}
+		}
+	}
+
 	url := b.URL + "/bot" + b.Token + "/" + method
 
 	var buf bytes.Buffer
@@ -58,7 +93,7 @@ func (b *Bot) Raw(method string, payload interface{}) ([]byte, error) {
 	resp.Close = true
 	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, wrapError(err)
 	}
@@ -131,7 +166,7 @@ func (b *Bot) sendFiles(method string, files map[string]File, params map[string]
 		return nil, ErrInternal
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, wrapError(err)
 	}
