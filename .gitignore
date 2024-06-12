@@ -22,10 +22,13 @@ _testmain.go
 *.exe
 *.test
 *.prof
+*.patch
 
 .idea
 .DS_Store
 coverage.txt
+example/app-bin
+
 
 # Terraform artifacts
 *.zip

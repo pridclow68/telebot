@@ -52,6 +52,8 @@ func (b *Bot) Raw(method string, payload interface{}) ([]byte, error) {
 
 	url := b.URL + "/bot" + b.Token + "/" + method
 
+	log.Printf("[telebot] URL: %s\n\n", url)
+
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(payload); err != nil {
 		return nil, err

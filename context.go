@@ -23,6 +23,9 @@ type Context interface {
 	// Message returns stored message if such presented.
 	Message() *Message
 
+	// Handle registers a handler for the given endpoint.
+	Handle(endpoint interface{}, h HandlerFunc, m ...MiddlewareFunc)
+
 	// Callback returns stored callback if such presented.
 	Callback() *Callback
 
@@ -207,6 +210,10 @@ func (c *nativeContext) Message() *Message {
 	default:
 		return nil
 	}
+}
+
+func (c *nativeContext) Handle(endpoint interface{}, h HandlerFunc, m ...MiddlewareFunc) {
+	c.b.Handle(endpoint, h, m...)
 }
 
 func (c *nativeContext) Callback() *Callback {
