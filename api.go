@@ -26,10 +26,6 @@ func (b *Bot) containsWebhookKey(payload interface{}) bool {
 				return true
 			}
 		}
-	case reflect.Struct:
-		if v.FieldByName("UseWebhook").IsValid() {
-			return true
-		}
 	}
 	return false
 }
