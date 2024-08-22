@@ -32,7 +32,7 @@ type API interface {
 	CustomEmojiStickers(ids []string) ([]Sticker, error)
 	DeclineJoinRequest(chat Recipient, user *User) error
 	DefaultRights(forChannels bool) (*Rights, error)
-	Delete(msg Editable) error
+	Delete(msg Editable, opts ...interface{}) error
 	DeleteCommands(opts ...interface{}) error
 	DeleteGroupPhoto(chat *Chat) error
 	DeleteGroupStickerSet(chat *Chat) error
