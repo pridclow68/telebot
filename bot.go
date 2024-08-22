@@ -218,6 +218,11 @@ func (b *Bot) Response() map[string]interface{} {
 	return b.response
 }
 
+// GetMe
+func (b *Bot) GetMe() *User {
+	return b.Me
+}
+
 // Start brings bot into motion by consuming incoming
 // updates (see Bot.Updates channel).
 func (b *Bot) Start() {

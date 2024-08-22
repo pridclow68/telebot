@@ -6,7 +6,7 @@ import "io"
 // with Telegram Bot API.
 type API interface {
 	Raw(method string, payload interface{}) ([]byte, error)
-
+	GetMe() *User
 	Accept(query *PreCheckoutQuery, errorMessage ...string) error
 	AddStickerToSet(of Recipient, name string, sticker InputSticker) error
 	AdminsOf(chat *Chat) ([]ChatMember, error)
