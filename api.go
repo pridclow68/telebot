@@ -7,6 +7,7 @@ import "io"
 type API interface {
 	Raw(method string, payload interface{}) ([]byte, error)
 	GetMe() *User
+	Trigger(endpoint interface{}, c Context) error
 	Accept(query *PreCheckoutQuery, errorMessage ...string) error
 	AddStickerToSet(of Recipient, name string, sticker InputSticker) error
 	AdminsOf(chat *Chat) ([]ChatMember, error)
