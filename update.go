@@ -32,10 +32,10 @@ type Update struct {
 
 // ProcessUpdate processes a single incoming update.
 // A started bot calls this function automatically.
-func (b *Bot) ProcessUpdate(u Update) {
+func (b *Bot) ProcessUpdate(u Update, body ...[]byte) {
 	// Reset the response object
 	b.response = nil
-	b.ProcessContext(b.NewContext(u))
+	b.ProcessContext(b.NewContext(u, body...))
 }
 
 // ProcessContext processes the given context.

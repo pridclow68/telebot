@@ -44,9 +44,10 @@ type Chat struct {
 	// Won't be there for ChatPrivate.
 	Title string `json:"title"`
 
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Username  string `json:"username"`
+	FirstName string   `json:"first_name"`
+	LastName  string   `json:"last_name"`
+	Username  string   `json:"username"`
+	Usernames []string `json:"active_usernames"`
 
 	// Returns only in getChat
 	Bio                            string               `json:"bio,omitempty"`

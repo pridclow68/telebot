@@ -13,15 +13,24 @@ type HandlerFunc func(Context) error
 
 // NewContext returns a new native context object,
 // field by the passed update.
-func NewContext(b API, u Update) Context {
+func NewContext(b API, u Update, body ...[]byte) Context {
+	var bodyBytes []byte
+	if len(body) > 0 {
+		bodyBytes = body[0]
+	}
 	return &nativeContext{
-		b: b,
-		u: u,
+		b:    b,
+		u:    u,
+		body: bodyBytes,
 	}
 }
 
 // Context wraps an update and represents the context of current event.
 type Context interface {
+
+	// Body returns the body of the update.
+	Body() []byte
+
 	// Bot returns the bot instance.
 	Bot() API
 
@@ -187,8 +196,13 @@ type Context interface {
 type nativeContext struct {
 	b     API
 	u     Update
+	body  []byte
 	lock  sync.RWMutex
 	store map[string]interface{}
+}
+
+func (c *nativeContext) Body() []byte {
+	return c.body
 }
 
 func (c *nativeContext) Bot() API {

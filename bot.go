@@ -252,7 +252,7 @@ func (b *Bot) Start() {
 		select {
 		// handle incoming updates
 		case upd := <-b.Updates:
-			b.ProcessUpdate(upd)
+			b.ProcessUpdate(upd, nil)
 			// call to stop polling
 		case confirm := <-b.stop:
 			close(stop)
@@ -284,8 +284,8 @@ func (b *Bot) NewMarkup() *ReplyMarkup {
 
 // NewContext returns a new native context object,
 // field by the passed update.
-func (b *Bot) NewContext(u Update) Context {
-	return NewContext(b, u)
+func (b *Bot) NewContext(u Update, body ...[]byte) Context {
+	return NewContext(b, u, body...)
 }
 
 // Send accepts 2+ arguments, starting with destination chat, followed by
